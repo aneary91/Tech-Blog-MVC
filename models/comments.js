@@ -3,11 +3,7 @@ const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 
 
-class Comments extends Homepage {
-  checkPassword(loginPw) {
-    return bcrypt.compareSync(loginPw, this.password);
-  }
-}
+class Comment extends Model {} 
 
 Comments.init(
   {
@@ -17,43 +13,35 @@ Comments.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
-    },
-    password: {
+    comment_text: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [8],
-      },
+        len: [1]
+      }
     },
+    user_id: {
+      type: DataTypes.STRING,
+      references: {
+        model: 'user',
+        key: 'id'
+      }
+    },
+    post_id: {
+      type: DataTypes.STRING,
+      references: {
+        model: 'post',
+        key: 'id'
+      }
+    }
   },
   {
-    hooks: {
-      beforeCreate: async (newUserData) => {
-        newUserData.password = await bcrypt.hash(newUserData.password, 10);
-        return newUserData;
-      },
-      beforeUpdate: async (updatedUserData) => {
-        updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
-        return updatedUserData;
-      },
-    },
     sequelize,
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: 'user',
+    modelName: 'comment',
   }
 );
 
-module.exports = User;
+module.exports = Comment;
