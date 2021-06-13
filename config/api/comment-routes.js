@@ -21,5 +21,27 @@ router.post('/', (req, res) => {
     .catch(err => {
         console.log(err);
         res.status(400).json(err);
-    });
+    })
 });
+
+router.delete('/:id', withAuth, (req.res) => {
+    Comment.destroy({ 
+        where: {
+            id: req.params.id
+        }
+    })
+    .then(dbComment => {
+        if (!dbCommentData) {
+            res.status(404).jspn({ message: 'NO comment is found with this id!'});
+            return;
+        }
+        res.join(dbCommentData);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+    })
+});
+
+module.export = router ;
+
