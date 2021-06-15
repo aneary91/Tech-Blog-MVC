@@ -8,7 +8,6 @@ test('format_url() returns a simplified url string', () => {
     expect(url1).toBe('test.com');
     expect(url2).toBe('coolstuff.com');
     expect(url3).toBe('google.com');
-
 });
 
 test('format_plural() returns a pluralized word', () => {
