@@ -1,26 +1,24 @@
-const { response } = require("express");
-
-async function newFormHandler(event) {
+async function upvoteClickHandler(event) {
     event.preventDefault();
 
-    const title = document.querySelector('input[name="post-title"]').value
-    const post_url = document.querySelector('input[name="post-url"]').value
-
-    const responce = await fetch('/apit/posts', {
-        method: 'POST',
-        body: JSON.stringify({
-            title,
-            post_url
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
+    const id = window.location.toString().split('/')[
+    window.location.toString().split('/').length - 1
+    ];
+    const response = await fetch('/api/posts/upvote', {
+    method: 'PUT',
+    body: JSON.stringify({
+        post_id: id
+    }),
+    headers: {
+        'Content-Type': 'application/json'
+    }
     });
 
     if (response.ok) {
-        document.location.replace('/dashboard');
+    document.location.reload();
     } else {
-        alert(response.statusText);
+    alert(response.statusText);
     }
 }
-document.querySelector('.new-post-form').addEventListener('submit', newFormHandler);
+
+document.querySelector('.upvote-btn').addEventListener('click', upvoteClickHandler);
